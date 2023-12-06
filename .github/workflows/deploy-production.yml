@@ -1,0 +1,53 @@
+name: deploy-production
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4.1.1
+      - uses: actions/setup-python@v5.0.0
+        with:
+          python-version: '3.12'
+
+      - name: deploy
+        uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
+        env:
+          TARGET_DIR: /home/${{ secrets.SSH_USERNAME_PRODUCTION }}
+          VENV_BIN: venv/bin
+        with:
+          host: ${{ secrets.SSH_HOST_PRODUCTION }}
+          user: ${{ secrets.SSH_USERNAME_PRODUCTION }}
+          pass: ${{ secrets.SSH_PASSWORD_PRODUCTION }}
+          port: 22
+          connect_timeout: 10s
+          first_ssh: |-
+            mkdir -p trip_aggregator
+            mkdir -p logs
+            test -d venv || python3.12 -m venv venv
+            touch .env
+
+          scp: |-
+            './etc/*' => $TARGET_DIR/etc/
+            './trip_aggregator/*' => $TARGET_DIR/trip_aggregator/
+            ./poetry.lock => $TARGET_DIR
+            ./pyproject.toml => $TARGET_DIR
+
+          last_ssh: |-
+            source $VENV_BIN/activate 
+            pip install --no-cache-dir poetry pip setuptools --upgrade
+            poetry config virtualenvs.create false --local
+            poetry install --only main --no-root
+            pip cache purge
+            echo 'DATABASE_USER=${{ secrets.DATABASE_USER_PRODUCTION }}' > .env
+            echo 'DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD_PRODUCTION }}' >> .env
+            echo 'DATABASE_NAME=${{ secrets.DATABASE_NAME_PRODUCTION }}' >> .env
+            echo 'DATABASE_HOST=${{ secrets.DATABASE_HOST_PRODUCTION }}' >> .env
+            echo 'DATABASE_PORT=${{ secrets.DATABASE_PORT_PRODUCTION }}' >> .env
+            PGPASSWORD=${{ secrets.DATABASE_MIGRATOR_PASSWORD_PRODUCTION }} psql -U ${{ secrets.DATABASE_MIGRATOR_USER_PRODUCTION }} -h ${{ secrets.DATABASE_HOST_PRODUCTION }} -p ${{ secrets.DATABASE_PORT_PRODUCTION }} -d ${{ secrets.DATABASE_NAME_PRODUCTION }} --set=sslmode=require -f etc/migrations.sql
+            crontab etc/crontab.txt

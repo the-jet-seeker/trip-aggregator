@@ -1,0 +1,3 @@
+# launch trips updater every 12 hours
+0 */12 * * * venv/bin/python -m trip_aggregator.run_task &>> logs/trip_aggregator.log
+
