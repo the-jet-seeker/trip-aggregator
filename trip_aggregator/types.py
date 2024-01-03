@@ -22,4 +22,17 @@ class Ticket:
 @dataclass
 class Trip:
     """Type of the one trip."""
-    # todo
+    start_date: pendulum.DateTime
+    end_date: pendulum.DateTime
+    currency: str
+
+    outbound_cost: Decimal
+    outbound_airport: str
+    outbound_airline: str
+    outbound_fly_number: str
+
+    return_cost: Decimal
+    return_airport: str
+    return_airline: str
+    return_fly_number: str
+

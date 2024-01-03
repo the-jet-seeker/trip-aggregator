@@ -12,3 +12,5 @@ def get_tickets(weekend_date: pendulum.Interval, home_airport: str) -> tuple[lis
     inbound_tickets = []
 
     return outbound_tickets, inbound_tickets
+
+
