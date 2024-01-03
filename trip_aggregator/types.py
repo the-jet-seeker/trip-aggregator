@@ -9,7 +9,6 @@ import pendulum
 class Ticket:
     """Type of the one ticket."""
 
-    uid: str
     dep_datetime: pendulum.DateTime
     from_airport_code: str
     to_airport_code: str
@@ -18,7 +17,6 @@ class Ticket:
     airline: str
     price: Decimal
     currency: str
-    source: str = Source.AZAIR
 
 
 @dataclass

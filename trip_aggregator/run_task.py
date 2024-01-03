@@ -5,7 +5,8 @@ from dataclasses import dataclass
 import pendulum
 
 from trip_aggregator.settings import app_settings
-from trip_aggregator.storage.trips import replace_trips, get_tickets
+from trip_aggregator.storage.tickets import get_tickets
+from trip_aggregator.storage.trips import replace_trips
 from trip_aggregator.trips_creator import create_trips
 
 logger = logging.getLogger(__file__)
@@ -22,7 +23,6 @@ class TripsUpdateResult:
 
 def main() -> TripsUpdateResult:
     """Generate new possible trips by tickets from db."""
-    # todo impl
     # todo test
     weekend_date = _calculate_weekend_interval()
     outbound_tickets, inbound_tickets = get_tickets(weekend_date, app_settings.HOME_AIRPORT)
