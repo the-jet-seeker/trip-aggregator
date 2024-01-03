@@ -27,7 +27,7 @@ class AppSettings(BaseSettings, extra='ignore'):
     DATABASE_PORT: int = Field(default=5432)
 
     HOME_AIRPORT: str = Field(default='PRG', description='department airport code')
-    HOME_TIMEZONE: pendulum.Timezone = Field(default=pendulum.Timezone('Europe/Prague'))
+    HOME_TIMEZONE: str = Field(default='Europe/Prague', description='local timezone')
 
 
 app_settings = AppSettings(
