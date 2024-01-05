@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pendulum
 
-from trip_aggregator import types
+from trip_aggregator import models
 from trip_aggregator.run_task import _calculate_weekend_interval
 from trip_aggregator.storage.trips import replace_trips
 
@@ -10,7 +10,7 @@ from trip_aggregator.storage.trips import replace_trips
 def test_replace_trips():
     weekend_date = _calculate_weekend_interval()
     trips = [
-        types.Trip(
+        models.Trip(
             start_date=pendulum.now(),
             end_date=pendulum.now().add(days=2),
             currency='CZK',
@@ -25,7 +25,7 @@ def test_replace_trips():
             return_airline='TestAirBack',
             return_fly_number='Test321',
         ),
-        types.Trip(
+        models.Trip(
             start_date=weekend_date.start,
             end_date=weekend_date.end,
             currency='CZK',

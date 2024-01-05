@@ -31,6 +31,7 @@ class Ticket(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     dep_datetime: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=False), index=True)
+    arr_datetime: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=False), index=True)
     from_airport_code: Mapped[str] = mapped_column(sa.String(length=3))
     to_airport_code: Mapped[str] = mapped_column(sa.String(length=3))
     flight_duration: Mapped[str] = mapped_column(sa.String)

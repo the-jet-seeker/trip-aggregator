@@ -2,7 +2,6 @@
 import os
 from decimal import getcontext
 
-import pendulum
 from pydantic import Field
 from pydantic_settings import BaseSettings
 

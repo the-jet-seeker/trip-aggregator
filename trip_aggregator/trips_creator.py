@@ -1,8 +1,8 @@
 """Methods to create trips from tickets."""
-from trip_aggregator import types
+from trip_aggregator import models
 
 
-def create_trips(outbound_tickets: list[types.Ticket], inbound_tickets: list[types.Ticket]) -> list[types.Trip]:
+def create_trips(outbound_tickets: list[models.Ticket], inbound_tickets: list[models.Ticket]) -> list[models.Trip]:
     """Create list of trips from lists of outbound and inbound tickets."""
     trips = []
 
@@ -10,9 +10,9 @@ def create_trips(outbound_tickets: list[types.Ticket], inbound_tickets: list[typ
         for inbound_ticket in inbound_tickets:
             if outbound_ticket.to_airport_code == inbound_ticket.from_airport_code:
                 trips.append(
-                    types.Trip(
+                    models.Trip(
                         start_date=outbound_ticket.dep_datetime,
-                        end_date=inbound_ticket.dep_datetime,
+                        end_date=inbound_ticket.arr_datetime,
                         currency=outbound_ticket.currency,
 
                         outbound_cost=outbound_ticket.price,

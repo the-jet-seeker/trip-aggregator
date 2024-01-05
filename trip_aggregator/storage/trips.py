@@ -1,12 +1,10 @@
 """Methods of interaction with the long-term trips storage subsystem."""
-import dataclasses
-
 import pendulum
 
-from trip_aggregator import types, models
+from trip_aggregator import models
 
 
-def replace_trips(trips: list[types.Trip], weekend_date: pendulum.Interval) -> int:
+def replace_trips(trips: list[models.Trip], weekend_date: pendulum.Interval) -> int:
     """Save list of trips to the database."""
     with models.Session() as session:
         session.execute(
@@ -16,11 +14,7 @@ def replace_trips(trips: list[types.Trip], weekend_date: pendulum.Interval) -> i
         )
 
         for trip in trips:
-            trip_model = models.Trip(
-                **dataclasses.asdict(trip),
-            )
-
-            session.add(trip_model)
+            session.add(trip)
         session.commit()
 
     return len(trips)

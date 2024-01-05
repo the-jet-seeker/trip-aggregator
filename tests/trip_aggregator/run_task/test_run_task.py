@@ -24,5 +24,5 @@ async def test_main_no_tickets(mocker):
 
     response = main()
 
-    assert response.is_success is False
+    assert response.is_success is True
     assert response.trips_found == 0

@@ -47,8 +47,18 @@ def _calculate_weekend_interval() -> pendulum.Interval:
     """Calculate date interval for the weekend trips."""
     current_date = pendulum.now(app_settings.HOME_TIMEZONE)
 
-    outbound_date = current_date.add(days=7).next(pendulum.FRIDAY).naive()
-    inbound_date = outbound_date.next(pendulum.MONDAY).add(hours=23, minutes=59, seconds=59).naive()
+    outbound_date = current_date.add(
+        days=7,
+    ).next(
+        pendulum.FRIDAY,
+    ).naive()
+    inbound_date = outbound_date.next(
+        pendulum.MONDAY,
+    ).add(
+        hours=23,
+        minutes=59,
+        seconds=59,
+    ).naive()
 
     return pendulum.Interval(outbound_date, inbound_date)
 
