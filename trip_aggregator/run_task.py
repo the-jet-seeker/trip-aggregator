@@ -23,8 +23,7 @@ class TripsUpdateResult:
 
 def main() -> TripsUpdateResult:
     """Generate new possible trips by tickets from db."""
-    # todo test
-    weekend_date = _calculate_weekend_interval()
+    weekend_date = _weekend_interval()
     outbound_tickets, inbound_tickets = get_tickets(weekend_date, app_settings.HOME_AIRPORT)
 
     trips = create_trips(outbound_tickets, inbound_tickets)
@@ -43,7 +42,7 @@ def main() -> TripsUpdateResult:
     )
 
 
-def _calculate_weekend_interval() -> pendulum.Interval:
+def _weekend_interval() -> pendulum.Interval:
     """Calculate date interval for the weekend trips."""
     current_date = pendulum.now(app_settings.HOME_TIMEZONE)
 

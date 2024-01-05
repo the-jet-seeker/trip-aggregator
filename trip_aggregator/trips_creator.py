@@ -1,5 +1,9 @@
 """Methods to create trips from tickets."""
+import logging
+
 from trip_aggregator import models
+
+logger = logging.getLogger(__file__)
 
 
 def create_trips(outbound_tickets: list[models.Ticket], inbound_tickets: list[models.Ticket]) -> list[models.Trip]:
@@ -8,7 +12,14 @@ def create_trips(outbound_tickets: list[models.Ticket], inbound_tickets: list[mo
 
     for outbound_ticket in outbound_tickets:
         for inbound_ticket in inbound_tickets:
+
             if outbound_ticket.to_airport_code == inbound_ticket.from_airport_code:
+
+                if outbound_ticket.currency != inbound_ticket.currency:
+                    logger.warning(
+                        f'Different currencies.\nOutbound - {outbound_ticket.currency}\ninbound - {inbound_ticket.currency}',
+                    )
+
                 trips.append(
                     models.Trip(
                         start_date=outbound_ticket.dep_datetime,

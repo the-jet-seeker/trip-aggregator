@@ -3,12 +3,12 @@ from decimal import Decimal
 import pendulum
 
 from trip_aggregator import models
-from trip_aggregator.run_task import _calculate_weekend_interval
+from trip_aggregator.run_task import _weekend_interval
 from trip_aggregator.storage.trips import replace_trips
 
 
 def test_replace_trips():
-    weekend_date = _calculate_weekend_interval()
+    weekend_date = _weekend_interval()
     trips = [
         models.Trip(
             start_date=pendulum.now(),

@@ -20,7 +20,7 @@ async def test_main_happy_path(mocker):
 
 async def test_main_no_tickets(mocker):
     trips = []
-    mocker.patch('trip_aggregator.run_task.replace_trips', return_value=trips)
+    mocker.patch('trip_aggregator.run_task.create_trips', return_value=trips)
 
     response = main()
 

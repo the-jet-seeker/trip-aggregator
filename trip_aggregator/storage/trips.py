@@ -10,6 +10,8 @@ def replace_trips(trips: list[models.Trip], weekend_date: pendulum.Interval) -> 
         session.execute(
             models.Trip.delete().where(
                 models.Trip.start_date >= weekend_date.start,
+            ).where(
+                models.Trip.end_date <= weekend_date.end,
             ),
         )
 
