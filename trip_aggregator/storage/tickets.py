@@ -5,27 +5,7 @@ from sqlalchemy import or_
 from trip_aggregator import models
 
 
-def get_tickets(
-    weekend_date: pendulum.Interval,
-    home_airport: str,
-) -> tuple[list[models.Ticket], list[models.Ticket]]:
-    """Get tickets from db. Return two lists with inbound tickets and outbound one."""
-    # todo impl  убрать из папки сторадж
-    # todo test
-    outbound_tickets = []
-    inbound_tickets = []
-    tickets = _fetch_tickets(weekend_date, home_airport)
-
-    for ticket in tickets:
-        if ticket.from_airport_code == home_airport:
-            outbound_tickets.append(ticket)
-        elif ticket.to_airport_code == home_airport:
-            inbound_tickets.append(ticket)
-
-    return outbound_tickets, inbound_tickets
-
-
-def _fetch_tickets(
+def fetch_tickets(
     weekend_date: pendulum.Interval,
     home_airport: str,
 ) -> list[models.Ticket]:

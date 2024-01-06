@@ -28,6 +28,11 @@ class AppSettings(BaseSettings, extra='ignore'):
     HOME_AIRPORT: str = Field(default='PRG', description='department airport code')
     HOME_TIMEZONE: str = Field(default='Europe/Prague', description='local timezone')
 
+    MINIMAL_TRIP_DURATION: int = Field(
+        default=18 * 60 * 60,
+        description='time between department and arrival time in seconds',
+    )
+
 
 app_settings = AppSettings(
     _env_file=os.path.join(APP_PATH, '.env'),  # type:ignore

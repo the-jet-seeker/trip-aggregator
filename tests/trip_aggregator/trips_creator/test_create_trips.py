@@ -1,9 +1,7 @@
+from datetime import datetime
 from decimal import Decimal
 from unittest.mock import Mock
 
-from pendulum import DateTime
-
-from trip_aggregator import models
 from trip_aggregator.trips_creator import create_trips
 
 
@@ -11,8 +9,8 @@ def test_create_trips_happy_path():
 
     outbound_tickets = [
         Mock(
-            dep_datetime=DateTime(2024, 1, 5, 0, 0, 0, tzinfo=None),
-            arr_datetime=DateTime(2024, 1, 5, 1, 10, 0, tzinfo=None),
+            dep_datetime=datetime(2024, 1, 5, 0, 0, 0, tzinfo=None),
+            arr_datetime=datetime(2024, 1, 5, 1, 10, 0, tzinfo=None),
             from_airport_code='PRG',
             to_airport_code='BCN',
             flight_duration='1:10',
@@ -22,8 +20,8 @@ def test_create_trips_happy_path():
             currency='CZK',
         ),
         Mock(
-            dep_datetime=DateTime(2024, 1, 6, 0, 0, 0, tzinfo=None),
-            arr_datetime=DateTime(2024, 1, 6, 1, 10, 0, tzinfo=None),
+            dep_datetime=datetime(2024, 1, 6, 0, 0, 0, tzinfo=None),
+            arr_datetime=datetime(2024, 1, 6, 1, 10, 0, tzinfo=None),
             from_airport_code='PRG',
             to_airport_code='BUD',
             flight_duration='1:10',
@@ -33,8 +31,8 @@ def test_create_trips_happy_path():
             currency='CZK',
         ),
         Mock(
-            dep_datetime=DateTime(2024, 1, 6, 0, 0, 0, tzinfo=None),
-            arr_datetime=DateTime(2024, 1, 6, 4, 10, 0, tzinfo=None),
+            dep_datetime=datetime(2024, 1, 6, 0, 0, 0, tzinfo=None),
+            arr_datetime=datetime(2024, 1, 6, 4, 10, 0, tzinfo=None),
             from_airport_code='PRG',
             to_airport_code='LED',
             flight_duration='4:10',
@@ -44,8 +42,8 @@ def test_create_trips_happy_path():
             currency='CZK',
         ),
         Mock(
-            dep_datetime=DateTime(2024, 1, 6, 3, 15, 0, tzinfo=None),
-            arr_datetime=DateTime(2024, 1, 6, 4, 25, 0, tzinfo=None),
+            dep_datetime=datetime(2024, 1, 6, 3, 15, 0, tzinfo=None),
+            arr_datetime=datetime(2024, 1, 6, 4, 25, 0, tzinfo=None),
             from_airport_code='PRG',
             to_airport_code='BUD',
             flight_duration='1:10',
@@ -57,8 +55,8 @@ def test_create_trips_happy_path():
     ]
     inbound_tickets = [
         Mock(
-            dep_datetime=DateTime(2024, 1, 7, 0, 0, 0, tzinfo=None),
-            arr_datetime=DateTime(2024, 1, 7, 1, 10, 0, tzinfo=None),
+            dep_datetime=datetime(2024, 1, 7, 0, 0, 0, tzinfo=None),
+            arr_datetime=datetime(2024, 1, 7, 1, 10, 0, tzinfo=None),
             from_airport_code='BCN',
             to_airport_code='PRG',
             flight_duration='1:10',
@@ -68,8 +66,8 @@ def test_create_trips_happy_path():
             currency='CZK',
         ),
         Mock(
-            dep_datetime=DateTime(2024, 1, 8, 0, 0, 0, tzinfo=None),
-            arr_datetime=DateTime(2024, 1, 8, 1, 10, 0, tzinfo=None),
+            dep_datetime=datetime(2024, 1, 8, 0, 0, 0, tzinfo=None),
+            arr_datetime=datetime(2024, 1, 8, 1, 10, 0, tzinfo=None),
             from_airport_code='BUD',
             to_airport_code='PRG',
             flight_duration='1:10',
@@ -79,8 +77,8 @@ def test_create_trips_happy_path():
             currency='CZK',
         ),
         Mock(
-            dep_datetime=DateTime(2024, 1, 8, 2, 10, 0, tzinfo=None),
-            arr_datetime=DateTime(2024, 1, 8, 4, 20, 0, tzinfo=None),
+            dep_datetime=datetime(2024, 1, 8, 2, 10, 0, tzinfo=None),
+            arr_datetime=datetime(2024, 1, 8, 4, 20, 0, tzinfo=None),
             from_airport_code='MAD',
             to_airport_code='PRG',
             flight_duration='2:10',
@@ -94,8 +92,8 @@ def test_create_trips_happy_path():
     res = create_trips(outbound_tickets, inbound_tickets)
 
     assert len(res) == 3
-    assert res[0].start_date == DateTime(2024, 1, 5, 0, 0, 0, tzinfo=None)
-    assert res[0].end_date == DateTime(2024, 1, 7, 1, 10, 0, tzinfo=None)
+    assert res[0].start_date == datetime(2024, 1, 5, 0, 0, 0, tzinfo=None)
+    assert res[0].end_date == datetime(2024, 1, 7, 1, 10, 0, tzinfo=None)
     assert res[0].currency == 'CZK'
 
     assert res[0].outbound_cost == Decimal('10')
@@ -113,3 +111,39 @@ def test_create_trips_happy_path():
 
     assert res[2].outbound_airport == 'PRG'
     assert res[2].return_airport == 'BUD'
+
+
+def test_create_trips_duration_filter():
+    outbound_tickets = [
+        Mock(
+            dep_datetime=datetime(2024, 1, 5, 0, 0, 0, tzinfo=None),
+            arr_datetime=datetime(2024, 1, 5, 1, 10, 0, tzinfo=None),
+            from_airport_code='PRG',
+            to_airport_code='BCN',
+            flight_number='outbound_test',
+            currency='CZK',
+        ),
+    ]
+    inbound_tickets = [
+        Mock(
+            dep_datetime=datetime(2024, 1, 5, 17, 10, 0, tzinfo=None),
+            arr_datetime=datetime(2024, 1, 5, 18, 0, 0, tzinfo=None),
+            from_airport_code='BCN',
+            to_airport_code='PRG',
+            flight_number='inbound_test_1',
+            currency='CZK',
+        ),
+        Mock(
+            dep_datetime=datetime(2024, 1, 5, 17, 10, 0, tzinfo=None),
+            arr_datetime=datetime(2024, 1, 5, 17, 59, 59, tzinfo=None),
+            from_airport_code='BCN',
+            to_airport_code='PRG',
+            flight_number='inbound_test_2',
+            currency='CZK',
+        ),
+    ]
+
+    res = create_trips(outbound_tickets, inbound_tickets)
+
+    assert len(res) == 1
+    assert res[0].return_fly_number == 'inbound_test_1'
