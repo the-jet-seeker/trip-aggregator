@@ -14,9 +14,9 @@ def fetch_tickets(
     with models.Session() as session:
         query = (
             models.Ticket.select().where(
-                models.Ticket.dep_datetime >= weekend_date.start,
+                models.Ticket.dep_datetime >= weekend_date.start.naive(),
             ).where(
-                models.Ticket.arr_datetime <= weekend_date.end,
+                models.Ticket.arr_datetime <= weekend_date.end.naive(),
             ).where(
                 or_(
                     models.Ticket.from_airport_code == home_airport,
