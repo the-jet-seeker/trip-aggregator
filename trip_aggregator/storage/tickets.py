@@ -10,7 +10,6 @@ def fetch_tickets(
     home_airport: str,
 ) -> list[models.Ticket]:
     """Fetch all tickets from home airport at the selected weekend from db."""
-    # todo test happy path
     with models.Session() as session:
         query = (
             models.Ticket.select().where(

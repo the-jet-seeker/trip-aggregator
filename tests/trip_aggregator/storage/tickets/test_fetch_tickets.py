@@ -34,8 +34,18 @@ def test_fetch_tickets_filter_dep_date(empty_tickets, ticket):
 
 
 def test_fetch_tickets_filter_arr_date(empty_tickets, ticket):
-    pass
+    res = fetch_tickets(
+        pendulum.Interval(start=ticket.dep_datetime, end=ticket.arr_datetime - timedelta(seconds=1)),
+        ticket.from_airport_code,
+    )
+
+    assert len(res) == 0
 
 
 def test_fetch_tickets_filter_airport(empty_tickets, ticket):
-    pass
+    res = fetch_tickets(
+        pendulum.Interval(start=ticket.dep_datetime, end=ticket.arr_datetime),
+        'BUD',
+    )
+
+    assert len(res) == 0
