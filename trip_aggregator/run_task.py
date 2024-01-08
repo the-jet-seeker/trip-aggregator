@@ -47,8 +47,8 @@ def _weekend_interval() -> pendulum.Interval:
     """Calculate date interval for the weekend trips."""
     current_date = pendulum.now(app_settings.HOME_TIMEZONE)
 
-    outbound_date = current_date.add(
-        days=7,
+    outbound_date = current_date.next(
+        pendulum.MONDAY,
     ).next(
         pendulum.FRIDAY,
     ).naive()
@@ -68,7 +68,6 @@ def _get_tickets(
     home_airport: str,
 ) -> tuple[list[models.Ticket], list[models.Ticket]]:
     """Get tickets from db. Return two lists with inbound tickets and outbound one."""
-    # todo impl
     # todo test
     outbound_tickets = []
     inbound_tickets = []

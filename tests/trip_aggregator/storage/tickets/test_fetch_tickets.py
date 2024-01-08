@@ -4,6 +4,7 @@ from trip_aggregator.storage.tickets import fetch_tickets
 
 
 def test_fetch_tickets_smoke():
+    # todo fixture with tickets and clean after
     weekend_date = _weekend_interval()
     home_airport = app_settings.HOME_AIRPORT
 
