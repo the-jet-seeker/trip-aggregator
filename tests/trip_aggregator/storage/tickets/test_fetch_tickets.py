@@ -32,6 +32,7 @@ def test_fetch_tickets_filter_dep_date(empty_tickets, ticket):
 
     assert len(res) == 0
 
+
 def test_fetch_tickets_filter_arr_date(empty_tickets, ticket):
     pass
 
