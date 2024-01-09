@@ -34,3 +34,4 @@ per-file-ignores =
     trip_aggregator/settings.py: WPS115, WPS432,
     trip_aggregator/types.py: WPS115,
     trip_aggregator/models.py: WPS432,
+    trip_aggregator/run_task.py: WPS432,

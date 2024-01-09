@@ -2,7 +2,6 @@
 import os
 from decimal import getcontext
 
-import pendulum
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
@@ -26,8 +25,13 @@ class AppSettings(BaseSettings, extra='ignore'):
     DATABASE_HOST: str = Field(default='localhost')
     DATABASE_PORT: int = Field(default=5432)
 
-    LOCAL_AIRPORT: str = Field(default='PRG', description='department airport code')
-    LOCAL_TIMEZONE: pendulum.Timezone = Field(default=pendulum.Timezone('Europe/Prague'))
+    HOME_AIRPORT: str = Field(default='PRG', description='department airport code')
+    HOME_TIMEZONE: str = Field(default='Europe/Prague', description='local timezone')
+
+    MINIMAL_TRIP_DURATION: int = Field(
+        default=18 * 60 * 60,
+        description='time between department and arrival time in seconds',
+    )
 
 
 app_settings = AppSettings(
