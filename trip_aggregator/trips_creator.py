@@ -1,5 +1,8 @@
 """Methods to create trips from tickets."""
 import logging
+from dataclasses import dataclass
+from datetime import datetime
+from decimal import Decimal
 
 from trip_aggregator import models
 from trip_aggregator.settings import app_settings
@@ -33,6 +36,8 @@ def _make_trip(outbound_ticket: models.Ticket, inbound_ticket: models.Ticket) ->
             f'Different currencies.\noutbound - {outbound_ticket.currency}\ninbound - {inbound_ticket.currency}',
         )
 
+    city = 'test'  # todo
+
     return models.Trip(
         start_date=outbound_ticket.dep_datetime,
         end_date=inbound_ticket.arr_datetime,
@@ -47,4 +52,53 @@ def _make_trip(outbound_ticket: models.Ticket, inbound_ticket: models.Ticket) ->
         return_airport=inbound_ticket.from_airport_code,
         return_airline=inbound_ticket.airline,
         return_fly_number=inbound_ticket.flight_number,
+
+        duration_nights=_trip_duration_nights(outbound_ticket.dep_datetime, inbound_ticket.arr_datetime),
+        meals_amount=_trip_meals_amount(outbound_ticket.dep_datetime, inbound_ticket.arr_datetime),
+        rent_cost=_calc_living_cost_numbeo(
+            city,
+            outbound_ticket.dep_datetime,
+            inbound_ticket.arr_datetime,
+        ).rent,  # todo test
+        meal_cost=_calc_living_cost_numbeo(
+            city,
+            outbound_ticket.dep_datetime,
+            inbound_ticket.arr_datetime,
+        ).meal,  # todo test
+    )
+
+
+def _trip_duration_nights(dep_datetime: datetime, arr_datetime: datetime) -> int:
+    """Calculate amount of nights in the trip."""
+    duration = arr_datetime.date() - dep_datetime.date()
+
+    return duration.days
+
+
+def _trip_meals_amount(dep_datetime: datetime, arr_datetime: datetime) -> int:
+    """Calculate amount of meals in the trip. One meal per 6 hours."""
+    duration = arr_datetime - dep_datetime
+    duration_in_hours = duration.total_seconds() // 3600  # WPS432
+
+    return int(duration_in_hours // 6)
+
+
+@dataclass
+class LivingCost:
+    """Type for numbeo data."""
+
+    rent: Decimal
+    meal: Decimal
+
+
+def _calc_living_cost_numbeo(city: str, dep_datetime: datetime, arr_datetime: datetime) -> LivingCost:
+    """Return the price of one night rent and one meal at the trip destination."""
+    # todo test
+    # todo imp
+
+    rent = Decimal(10)
+    meal = Decimal(10)
+    return LivingCost(
+        rent,
+        meal,
     )
