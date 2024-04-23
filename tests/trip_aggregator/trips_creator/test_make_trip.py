@@ -15,6 +15,7 @@ def test_make_trip_smoke():
     inbound_ticket = Mock(
         currency='CZK',
         arr_datetime=datetime(2024, 1, 31, 23, 0, 0, tzinfo=None),
+        from_airport_code='PRG',
     )
 
     res = _make_trip(outbound_ticket, inbound_ticket)
