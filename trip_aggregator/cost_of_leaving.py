@@ -21,7 +21,4 @@ def get_cost_of_leaving(airport: str) -> CoastOfLeaving | None:
             app_settings.COAST_OF_LEAVING_DATA[airport][1],
         )
 
-    return CoastOfLeaving(
-        None,
-        None,
-    )  # todo test
+    return None
