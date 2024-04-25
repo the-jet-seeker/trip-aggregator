@@ -68,7 +68,6 @@ def _get_tickets(
     home_airport: str,
 ) -> tuple[list[models.Ticket], list[models.Ticket]]:
     """Get tickets from db. Return two lists with inbound tickets and outbound one."""
-    # todo test
     outbound_tickets = []
     inbound_tickets = []
     tickets = fetch_tickets(weekend_date, home_airport)

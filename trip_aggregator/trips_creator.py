@@ -1,7 +1,9 @@
 """Methods to create trips from tickets."""
 import logging
+from datetime import datetime
 
 from trip_aggregator import models
+from trip_aggregator.cost_of_leaving import get_cost_of_leaving
 from trip_aggregator.settings import app_settings
 
 logger = logging.getLogger(__file__)
@@ -32,6 +34,11 @@ def _make_trip(outbound_ticket: models.Ticket, inbound_ticket: models.Ticket) ->
         raise RuntimeError(
             f'Different currencies.\noutbound - {outbound_ticket.currency}\ninbound - {inbound_ticket.currency}',
         )
+    if cost_data := get_cost_of_leaving(inbound_ticket.from_airport_code):
+        rent_cost = cost_data.night
+        meal_cost = cost_data.meal
+    else:
+        rent_cost, meal_cost = None, None
 
     return models.Trip(
         start_date=outbound_ticket.dep_datetime,
@@ -47,4 +54,25 @@ def _make_trip(outbound_ticket: models.Ticket, inbound_ticket: models.Ticket) ->
         return_airport=inbound_ticket.from_airport_code,
         return_airline=inbound_ticket.airline,
         return_fly_number=inbound_ticket.flight_number,
+
+        duration_nights=_trip_duration_nights(outbound_ticket.dep_datetime, inbound_ticket.arr_datetime),
+        meals_amount=_trip_meals_amount(outbound_ticket.dep_datetime, inbound_ticket.arr_datetime),
+
+        rent_cost=rent_cost,
+        meal_cost=meal_cost,
     )
+
+
+def _trip_duration_nights(dep_datetime: datetime, arr_datetime: datetime) -> int:
+    """Calculate amount of nights in the trip."""
+    duration = arr_datetime.date() - dep_datetime.date()
+
+    return duration.days
+
+
+def _trip_meals_amount(dep_datetime: datetime, arr_datetime: datetime) -> int:
+    """Calculate amount of meals in the trip. One meal per 6 hours."""
+    duration = arr_datetime - dep_datetime
+    duration_in_hours = duration.total_seconds() // 3600
+
+    return int(duration_in_hours // app_settings.BETWEEN_MEAL_INTERVAL)

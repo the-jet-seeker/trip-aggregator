@@ -1,7 +1,7 @@
 # The Jet Seeker [aggregator]
 
-[![tests](https://github.com/the-jet-seeker/trip-aggregator/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/the-jet-seeker/trip-aggregator/actions/workflows/tests.yml)
-[![linters](https://github.com/the-jet-seeker/trip-aggregator/actions/workflows/linters.yml/badge.svg?branch=master)](https://github.com/the-jet-seeker/trip-aggregator/actions/workflows/linters.yml)
+[![tests](https://github.com/the-jet-seeker/trip-aggregator/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/the-jet-seeker/trip-aggregator/actions/workflows/tests.yml)
+[![linters](https://github.com/the-jet-seeker/trip-aggregator/actions/workflows/linters.yml/badge.svg?branch=main)](https://github.com/the-jet-seeker/trip-aggregator/actions/workflows/linters.yml)
 
 
 ### Pre-requirements
