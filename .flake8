@@ -27,6 +27,9 @@ ignore =
     # Found string literal over-use: 0 > 3
     WPS226,
 
+    # Found walrus operator
+    WPS332,
+
 
 per-file-ignores =
     # WPS115 Found upper-case constant in a class
@@ -35,3 +38,4 @@ per-file-ignores =
     trip_aggregator/types.py: WPS115,
     trip_aggregator/models.py: WPS432,
     trip_aggregator/run_task.py: WPS432,
+    trip_aggregator/trips_creator.py: WPS432,

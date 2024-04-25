@@ -19,3 +19,8 @@ CREATE TABLE IF NOT EXISTS "public"."trip" (
 CREATE INDEX IF NOT EXISTS "trip_end_date" ON "public"."trip" USING btree ("end_date");
 CREATE INDEX IF NOT EXISTS "trip_start_date" ON "public"."trip" USING btree ("start_date");
 CREATE INDEX IF NOT EXISTS "trip_outbound_airport" ON "trip" ("outbound_airport");
+
+ALTER TABLE "public"."trip" ADD COLUMN IF NOT EXISTS "duration_nights" smallint DEFAULT NULL;
+ALTER TABLE "public"."trip" ADD COLUMN IF NOT EXISTS "meals_amount" smallint DEFAULT NULL;
+ALTER TABLE "public"."trip" ADD COLUMN IF NOT EXISTS "rent_cost" numeric(20,2) DEFAULT NULL;
+ALTER TABLE "public"."trip" ADD COLUMN IF NOT EXISTS "meal_cost" numeric(20,2) DEFAULT NULL;
