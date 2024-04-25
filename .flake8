@@ -27,6 +27,9 @@ ignore =
     # Found string literal over-use: 0 > 3
     WPS226,
 
+    # Found walrus operator
+    WPS332,
+
 
 per-file-ignores =
     # WPS115 Found upper-case constant in a class

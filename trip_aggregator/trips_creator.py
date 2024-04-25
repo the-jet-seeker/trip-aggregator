@@ -34,12 +34,11 @@ def _make_trip(outbound_ticket: models.Ticket, inbound_ticket: models.Ticket) ->
         raise RuntimeError(
             f'Different currencies.\noutbound - {outbound_ticket.currency}\ninbound - {inbound_ticket.currency}',
         )
-    if get_cost_of_leaving(inbound_ticket.from_airport_code):
-        rent_cost = get_cost_of_leaving(inbound_ticket.from_airport_code).night
-        meal_cost = get_cost_of_leaving(inbound_ticket.from_airport_code).meal
+    if cost_data := get_cost_of_leaving(inbound_ticket.from_airport_code):
+        rent_cost = cost_data.night
+        meal_cost = cost_data.meal
     else:
-        rent_cost = None
-        meal_cost = None
+        rent_cost, meal_cost = None, None
 
     return models.Trip(
         start_date=outbound_ticket.dep_datetime,
@@ -76,4 +75,4 @@ def _trip_meals_amount(dep_datetime: datetime, arr_datetime: datetime) -> int:
     duration = arr_datetime - dep_datetime
     duration_in_hours = duration.total_seconds() // 3600
 
-    return int(duration_in_hours // 6)
+    return int(duration_in_hours // app_settings.BETWEEN_MEAL_INTERVAL)

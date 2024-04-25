@@ -32,6 +32,10 @@ class AppSettings(BaseSettings, extra='ignore'):
         default=18 * 60 * 60,
         description='time between department and arrival time in seconds',
     )
+    BETWEEN_MEAL_INTERVAL: int = Field(
+        default=6,
+        description='time between one food and the next one during the trip.',
+    )
 
     COAST_OF_LEAVING_DATA: dict[str, tuple[int, int]] = {
         'PRG': (2438, 200),
